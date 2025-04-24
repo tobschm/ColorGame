@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import './GamePage.css';
 
 function GamePage() {
   const [status, setStatus] = useState("Warte auf Sprachbefehl...");
