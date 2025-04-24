@@ -1,12 +1,5 @@
-# React + Vite
+# About
+This is a game using the Stroop-effect (https://en.wikipedia.org/wiki/Stroop_effect). The user is presented a randomized combination of a written color-name and a text-color. The user has to say the text color as fast as possible to proceed to the next round.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Technical description
+This application is created with React and Javascript. Speech recognition is used to gather the users input and check for the color-name.
