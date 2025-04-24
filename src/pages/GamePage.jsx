@@ -7,6 +7,7 @@ function GamePage() {
   const [textColorRGB, setTextColorRGB] = useState("");
   const [textColor, setTextColor] = useState("");
   const [round, setRound] = useState(1);
+  const [recognition, setRecognition] = useState(null);
 
   // Zufällige Farbe generieren
   const createRandom = () => {
@@ -22,7 +23,7 @@ function GamePage() {
       grün: 'rgb(0, 128, 0)',
       blau: 'rgb(0, 0, 255)',
       gelb: 'rgb(231, 231, 20)'
-    }
+    };
     const keys = Object.keys(rgbs);
     const rgbIndex = Math.floor(Math.random() * colors.length);
     setTextColorRGB(rgbs[keys[rgbIndex]]);
@@ -30,7 +31,6 @@ function GamePage() {
     console.log("🎲 Zufällige Ziel-Farbe (textColor):", keys[rgbIndex]);
   };
 
-  // Wird beim Start einmal ausgeführt
   useEffect(() => {
     createRandom();
 
@@ -42,16 +42,16 @@ function GamePage() {
       return;
     }
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = "de-DE";
-    recognition.continuous = true;
-    recognition.interimResults = false;
+    const newRecognition = new SpeechRecognition();
+    newRecognition.lang = "de-DE";
+    newRecognition.continuous = true;
+    newRecognition.interimResults = false;
 
-    recognition.onstart = () => {
+    newRecognition.onstart = () => {
       setStatus("🎤 Mikrofon aktiviert – sprich jetzt!");
     };
 
-    recognition.onresult = (event) => {
+    newRecognition.onresult = (event) => {
       const transcript =
         event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
 
@@ -60,20 +60,21 @@ function GamePage() {
       console.log("🎧 Erkanntes Wort:", transcript);
       console.log("🔍 Erwartete Farbe:", textColor);
 
-      // Korrekte Antwort prüfen
       if (transcript.includes(textColor)) {
         handleCorrectAnswer();
       }
     };
 
-    recognition.onerror = (event) => {
+    newRecognition.onerror = (event) => {
       setStatus(`Fehler: ${event.error}`);
     };
 
-    recognition.start();
+    newRecognition.start();
+    setRecognition(newRecognition);
 
+    // Cleanup
     return () => {
-      recognition.stop();
+      newRecognition.stop();
     };
   }, []);
 
@@ -84,8 +85,9 @@ function GamePage() {
       setRound(prev => prev + 1);
     } else {
       setStatus("Ende");
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.stop();
+      if (recognition) {
+        recognition.stop();
+      }
     }
   };
 
