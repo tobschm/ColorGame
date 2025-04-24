@@ -1,0 +1,30 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+body {
+    display: flex;
+    justify-content: center; 
+    align-items: stretch; 
+}
+
+.mainContainer{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: rgb(224, 224, 224);
+    margin: 0 auto;
+    width: 400px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.startButton {
+    font-size: large;
+    margin-right: 30px;
+    margin-left: 30px;
+    border-radius: 15px;
+    background-color: rgb(226, 146, 72);
+}

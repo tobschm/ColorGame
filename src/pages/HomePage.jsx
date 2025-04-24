@@ -5,9 +5,9 @@ function HomePage() {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div className='mainContainer'>
       <h1>Startseite</h1>
-      <button onClick={() => navigate('/game')}>Start</button>
+      <button className='startButton' onClick={() => navigate('/game')}>Start</button>
     </div>
   )
 }
