@@ -4,7 +4,8 @@ import './GamePage.css';
 function GamePage() {
   const [status, setStatus] = useState("Warte auf Sprachbefehl...");
   const [lastWord, setLastWord] = useState("");
-  const [color, setColor] = useState("");
+  const [writtenColor, setWrittenColor] = useState("");
+  const [textColorRGB, setTextColorRGB] = useState("");
   const [textColor, setTextColor] = useState("");
 
   useEffect(() => {
@@ -35,8 +36,8 @@ function GamePage() {
       setLastWord(transcript);
       setStatus(`Erkannt: "${transcript}"`);
 
-      if (transcript.includes("weiter")) {
-        handleWeiter();
+      if (transcript.includes({ textColor })) {
+        handleCorrectAnswer();
       }
     };
 
@@ -52,16 +53,16 @@ function GamePage() {
     };
   }, []);
 
-  const handleWeiter = () => {
-    alert("➡️ Du hast 'weiter' gesagt!");
-    setStatus("✅ Sprachbefehl erkannt: 'weiter'");
+  const handleCorrectAnswer = () => {
+    alert("➡️ Richtig");
+    setStatus("✅ Correct'");
   };
 
   const createRandom = () => {
     // get random text
     const colors = ['Schwarz', 'Rot', 'Grün', 'Blau', 'Gelb'];
     const index = Math.floor(Math.random() * colors.length);
-    setColor(colors[index]);
+    setWrittenColor(colors[index]);
 
     // get random text color
     const rgbs = {
@@ -73,18 +74,17 @@ function GamePage() {
     }
     const keys = Object.keys(rgbs);
     const rgbIndex = Math.floor(Math.random() * colors.length);
-    setTextColor(rgbs[keys[rgbIndex]]);
+    setTextColorRGB(rgbs[keys[rgbIndex]]);
+    setTextColor(keys[index]);
   }
-  
+
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Sprachsteuerung mit React</h1>
       <p>{status}</p>
-      <p style={{ color: textColor}}>{color}</p>
+      <h2 style={{ color: textColorRGB }}>{writtenColor}</h2>
       {lastWord && <p><strong>Letzter Befehl:</strong> {lastWord}</p>}
-
     </div>
-
   );
 }
 

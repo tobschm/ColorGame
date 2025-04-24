@@ -6,8 +6,8 @@ function HomePage() {
 
   return (
     <div>
-      <h1>Willkommen auf der Startseite</h1>
-      <button onClick={() => navigate('/game')}>Zum Spiel</button>
+      <h1>Startseite</h1>
+      <button onClick={() => navigate('/game')}>Start</button>
     </div>
   )
 }
