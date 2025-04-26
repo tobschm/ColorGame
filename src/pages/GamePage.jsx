@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import './GamePage.css';
 
 function GamePage() {
@@ -6,13 +6,14 @@ function GamePage() {
   const [writtenColor, setWrittenColor] = useState("");
   const [textColorRGB, setTextColorRGB] = useState("");
   const [textColor, setTextColor] = useState("");
+  const textColorRef = useRef("");
   const [round, setRound] = useState(1);
-  const [recognition, setRecognition] = useState(null);
+  const roundRef = useRef(1);
+  const recognitionRef = useRef(null);
 
-  // Zufällige Farbe generieren
   const createRandom = () => {
     // get random text
-    const colors = ['Schwarz', 'Rot', 'Grün', 'Blau', 'Gelb'];
+    const colors = ['Schwarz', 'Rot', 'Grün', 'Blau', 'Gelb', 'Lila'];
     const index = Math.floor(Math.random() * colors.length);
     setWrittenColor(colors[index]);
 
@@ -22,12 +23,14 @@ function GamePage() {
       rot: 'rgb(255, 0, 0)',
       grün: 'rgb(0, 128, 0)',
       blau: 'rgb(0, 0, 255)',
-      gelb: 'rgb(231, 231, 20)'
+      gelb: 'rgb(231, 231, 20)',
+      lila: 'rgb(125, 27, 134)'
     };
     const keys = Object.keys(rgbs);
     const rgbIndex = Math.floor(Math.random() * colors.length);
     setTextColorRGB(rgbs[keys[rgbIndex]]);
     setTextColor(keys[rgbIndex]);
+    textColorRef.current = keys[rgbIndex];
     console.log("🎲 Zufällige Ziel-Farbe (textColor):", keys[rgbIndex]);
   };
 
@@ -46,6 +49,7 @@ function GamePage() {
     newRecognition.lang = "de-DE";
     newRecognition.continuous = true;
     newRecognition.interimResults = false;
+    recognitionRef.current = newRecognition;
 
     newRecognition.onstart = () => {
       setStatus("🎤 Mikrofon aktiviert – sprich jetzt!");
@@ -58,9 +62,8 @@ function GamePage() {
       setStatus(`Erkannt: "${transcript}"`);
 
       console.log("🎧 Erkanntes Wort:", transcript);
-      console.log("🔍 Erwartete Farbe:", textColor);
 
-      if (transcript.includes(textColor)) {
+      if (textColorRef.current && transcript.includes(textColorRef.current)) {
         handleCorrectAnswer();
       }
     };
@@ -70,21 +73,33 @@ function GamePage() {
     };
 
     newRecognition.start();
-    setRecognition(newRecognition);
 
-    // Cleanup
     return () => {
       newRecognition.stop();
     };
   }, []);
 
   const handleCorrectAnswer = () => {
-    if (round < 10) {
-      setStatus("✅ Richtig!");
-      createRandom();
-      setRound(prev => prev + 1);
+    const recognition = recognitionRef.current;
+    if (!recognition) return;
+
+    recognition.stop();
+    setStatus("✅ Richtig!");
+    setWrittenColor("");
+    console.log(roundRef.current);
+    if (roundRef.current < 10) {
+      roundRef.current += 1;
+      setTimeout(() => {
+        createRandom();
+        setRound(roundRef.current);
+        recognition.start();
+        setStatus("🎤 Mikrofon aktiviert – sprich jetzt!");
+      }, 750);
+
     } else {
-      setStatus("Ende");
+      setStatus("");
+      setTextColorRGB('rgb(0, 0, 0)');
+      setWrittenColor("Ende");
       if (recognition) {
         recognition.stop();
       }
@@ -92,10 +107,10 @@ function GamePage() {
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <p>{status}</p>
-      <h2 style={{ color: textColorRGB }}>{writtenColor}</h2>
-      <p>{round}/10</p>
+    <div className='mainContainer'>
+      <p className='status'>{status}</p>
+      <p className='colorField' style={{ color: textColorRGB }}>{writtenColor}</p>
+      <p className='round'>{round}/10</p>
     </div>
   );
 }

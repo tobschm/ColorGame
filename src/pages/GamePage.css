@@ -1,0 +1,35 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+body {
+    display: flex;
+    justify-content: center; 
+    align-items: stretch; 
+}
+
+.mainContainer{
+    
+    text-align: center;
+    background-color: rgb(224, 224, 224);
+    margin: 0 auto;
+    width: 400px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.colorField {
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.status, .round {
+    font-size: 18px;
+}
+
+.round {
+    font-weight: 500;
+}

@@ -28,3 +28,8 @@ body {
     border-radius: 15px;
     background-color: rgb(226, 146, 72);
 }
+
+.startButton:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 25px rgb(197, 138, 11);
+}
