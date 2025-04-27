@@ -35,10 +35,15 @@
     "productName": "Stroop-brain-trainer",
     "files": [
       "dist/**/*",
-      "electron.cjs"
+      "electron.cjs",
+      "package.json"
     ],
     "directories": {
       "buildResources": "build"
+    },
+    "asar": true,
+    "win": {
+      "target": "nsis"
     }
   }
 }
