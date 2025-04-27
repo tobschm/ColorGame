@@ -7,22 +7,24 @@ function createWindow() {
     height: 600,
     webPreferences: {
       contextIsolation: true,
-    },
+      nodeIntegration: false,
+    }
   });
 
   win.loadFile(path.join(__dirname, 'dist', 'index.html'));
+
+  // Optional: DevTools
+  win.webContents.openDevTools();
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
 });
